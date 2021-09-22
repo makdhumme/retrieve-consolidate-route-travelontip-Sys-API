@@ -1,0 +1,11 @@
+http:
+  listner:
+   host: "localhost"
+   port: "9084"
+  requester:
+   host: "localhost"
+   port: "9081"
+   routes: "/travelonTip/routes"
+   schedules: "/travelonTip/schedules"
+
+  
