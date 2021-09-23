@@ -1,0 +1,239 @@
+#%RAML 1.0
+title: retrieve-consolidate-route-travelontip-Sys-API
+description: this api will fetch routes and schedules for Travel on Tip system
+
+/{transportType}:
+  /{trnaportCompany}:
+    /routes:
+      get:
+        headers:
+          trabsactionID:
+            type: string
+            required: true
+            example: "abc-123-def"
+        responses:
+          200:
+            body:
+              application/json:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    originLocation:
+                      type: object
+                      properties:
+                        locationCode:
+                          type: string
+                          required: true
+                          example: "BEN"
+                    destinationLocation:
+                      type: object
+                      properties:
+                        locationCode:
+                          type: string
+                          required: true
+                          example: "KLG"
+                example:
+                  [{
+                    "originLocation": {
+                      "locationCode": "BEN-SG"
+                    },
+                    "destinationLocation": {
+                      "locationCode": "KLG-MY"
+                    }},
+                  {
+                    "originLocation": {
+                      "locationCode": "BEN-SG"
+                    },
+                    "destinationLocation": {
+                      "locationCode": "KLG-MY"}}]
+          400:
+            body:
+              application/json:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    required: true
+                    example: 400
+                  message:
+                    type: string
+                    required: true
+                    example: "Bad Request"
+                example:
+                  {
+                    "status": 400,
+                    "message": "Bad Request"
+                  }
+          404:
+            body:
+              application/json:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    required: true
+                    example: 404
+                  message:
+                    type: string
+                    required: true
+                    example: "Error Message"
+                example:
+                  {
+                    "status": 404,
+                    "message": "Page notfound"
+                  }
+          500:
+           body:
+              application/json:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    required: true
+                    example: 500
+                  message:
+                    type: string
+                    required: true
+                    example: "Critical Error"
+                example:
+                  {
+                    "status": 500,
+                    "message": "Critical Error"
+                  }
+    /schedules:
+      get:
+        headers:
+          trabsactionID:
+            type: string
+            required: true
+            example: "abc-123-def"
+        queryParameters:
+          depatureLocationCode:
+            required: false
+            type: string
+            example: "BNG"
+          destinationLocationCode:
+            required: false
+            type: string
+            example: "KLG"    
+        responses:
+          200:
+            body:
+              application/json:
+                type: array
+                items: 
+                  properties:
+                    departureSchedules:
+                      type: array
+                      items:
+                        properties:
+                          availableSeats:
+                            type: number
+                            required: true
+                            example: 20
+                          depatureDateTime:
+                            type: string
+                            required: true
+                            example: "2019-04-3-T16:41:41"
+                          travelRoute:
+                            type: object
+                            properties:
+                              destinationLocation:
+                                type: object
+                                properties:
+                                  locationCode:
+                                    type: string
+                                    required: true
+                                    example: "KLG"
+                                  locationDesc:
+                                    type: string
+                                    required: true
+                                    example: "Klang"
+                              originLocation:
+                                type: object
+                                properties:
+                                  locationCode:
+                                    type: string
+                                    required: true
+                                    example: "BEN"
+                                  locationDesc:
+                                    type: string
+                                    required: true
+                                    example: "Beauna"
+                example:
+                  [{
+                    "departureSchedules": [
+                      {
+                        "availableSeats": 20,
+                        "depatureDateTime": "2019-04-3-T16:41:41",
+                        "travelRoute": {
+                          "destinationLocation": {
+                            "locationCode": "KLG",
+                            "locationDesc": "Klang"
+                          },
+                          "originLocation": {
+                            "locationCode": "BEN",
+                            "locationDesc": "Beauna"
+                          }
+                        }
+                      }
+                    ]
+                    }]
+          400:
+            body:
+              application/json:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    required: true
+                    example: 400
+                  message:
+                    type: string
+                    required: true
+                    example: "Bad Request"
+                example:
+                  {
+                    "status": 400,
+                    "message": "Bad Request"
+                  }
+          404:
+            body:
+              application/json:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    required: true
+                    example: 404
+                  message:
+                    type: string
+                    required: true
+                    example: "Error Message"
+                example:
+                  {
+                    "status": 404,
+                    "message": "Page notfound"
+                  }
+          500:
+           body:
+              application/json:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    required: true
+                    example: 500
+                  message:
+                    type: string
+                    required: true
+                    example: "Critical Error"
+                example:
+                  {
+                    "status": 500,
+                    "message": "Critical Error"
+                  }
+
+                                                                                    
+                              

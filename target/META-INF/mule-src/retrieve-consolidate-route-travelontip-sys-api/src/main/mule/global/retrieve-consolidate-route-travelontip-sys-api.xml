@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    <http:listener-config name="retrieve-consolidate-route-travelontip-sys-api-httpListenerConfig">
+        <http:listener-connection host="${http.listner.host}" port="${http.listner.port}" />
+    </http:listener-config>
+    <apikit:config name="retrieve-consolidate-route-travelontip-sys-api-config" api="retrieve-consolidate-route-travelontip-sys-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <configuration-properties doc:name="Configuration properties" doc:id="f4211de4-e44e-433b-8c93-824dbf53997f" file="config/${env}.yaml" />
+	<global-property doc:name="Global Property" doc:id="6862d6db-a91b-44bf-a8df-53a699e0dae0" name="env" value="local" />
+	<flow name="retrieve-consolidate-route-travelontip-sys-api-main">
+        <http:listener config-ref="retrieve-consolidate-route-travelontip-sys-api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="retrieve-consolidate-route-travelontip-sys-api-config" />
+        <error-handler ref="globalErrorHandlerError_Handler">
+        </error-handler>
+    </flow>
+    <flow name="retrieve-consolidate-route-travelontip-sys-api-console">
+        <http:listener config-ref="retrieve-consolidate-route-travelontip-sys-api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="retrieve-consolidate-route-travelontip-sys-api-config" />
+		<error-handler ref="globalErrorHandlerError_Handler" />
+    </flow>
+    <sub-flow name="variabldefined" doc:id="946d4199-c131-4757-8c53-79c5197b1c46" >
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" doc:id="1e298408-396e-4688-9e4b-b4c724bea646">
+            <ee:variables>
+				<ee:set-variable variableName="transactionid" ><![CDATA[%dw 2.0
+output application/json
+---
+attributes.headers.trabsactionID
+
+]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+	</sub-flow>
+	<flow name="get:\(transportType)\(trnaportCompany)\routes:retrieve-consolidate-route-travelontip-sys-api-config">
+		<flow-ref doc:name="get route intial variable" doc:id="b4f6caf2-f676-48d7-8584-61c523a31dc8" name="variabldefined"/>
+		<logger level="INFO" doc:name="Logger" doc:id="98c87fba-fa53-4804-a946-d37039619880" message="request recieved for get route travelon tio for #[vars.transactionid]"/>
+		<flow-ref doc:name="Flow Reference" doc:id="117baa53-104a-4a3c-a4bb-10e7b6489491" name="travelontip-getroutes-implementationSub_Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="778f750f-78a2-42f9-9220-039cb26a9c49" message="response sent for get route travelon tio for #[vars.transactionid]"/>
+    </flow>
+    <flow name="get:\(transportType)\(trnaportCompany)\schedules:retrieve-consolidate-route-travelontip-sys-api-config">
+		<flow-ref doc:name="get schedule intial variable" doc:id="d0a12a7f-de0d-46b1-a6ab-e81c129c6d6e" name="variabldefined"/>
+		<logger level="INFO" doc:name="Logger" doc:id="e3dec77e-854d-4507-8a28-c192b64f79e6" message="request recieved for get schedule travelon tio for #[vars.transactionid]"/>
+		<flow-ref doc:name="Flow Reference" doc:id="a3455f3d-c4d1-4c3b-af14-c93a1dfaa4fe" name="travelontip-getschedules-implementationSub_Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="e3688a3a-d400-420a-9acc-21354a1f4209" message="response sent for get schedule travelon tio for #[vars.transactionid]"/>
+    </flow>
+</mule>

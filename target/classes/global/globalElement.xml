@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="758f24b5-94ae-4575-bfa4-7ed69fdbe174" >
+		<http:request-connection host="${http.requester.host}" port="${http.requester.port}"/>
+	</http:request-config>
+	<configuration doc:name="Configuration" doc:id="59d9b5f1-12a2-4bd7-9225-2dc5ec4898bf" defaultErrorHandler-ref="globalErrorHandlerError_Handler" />
+
+	
+	
+	</mule>
